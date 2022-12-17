@@ -15,8 +15,16 @@ def get_complete_user_profile(userid):
     rsp_data = {'user_info':None, 'partner_info':None, 'post_info':None}
     future1 = session.get(f'{os.environ.get("MS2_URL")}api/userprofile/{userid}')
     future2 = session.get(f'{os.environ.get("MS1_URL")}api/user/{userid}/partner')
+    future3 = session.post(f'{os.environ.get("MS3_URL")}api/forum/user_id/{userid}', json = {
+                "label": 5,
+                "sort": 1,
+                "limit": 1000,
+                "page": 1,
+                "mypost": 1
+            })
     response1 = future1.result().json()
     response2 = future2.result().json()
+    response3 = future3.result().json()
 
     # if user not found
     if not response1['success']:
@@ -24,6 +32,7 @@ def get_complete_user_profile(userid):
         return rsp
     
     rsp_data['user_info'] = response1['data'][0]
+    rsp_data['post_info'] = response3
 
 
     # if the user has a partner, get partner's infomation

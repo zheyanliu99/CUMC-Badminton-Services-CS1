@@ -13,7 +13,7 @@ CORS(app)
 session = FuturesSession()
 def get_complete_user_profile(userid):
     rsp_data = {'user_info':None, 'partner_info':None, 'post_info':None}
-    future1 = session.get(f'{os.environ.get("MS2_URL")}api/userprofile/{userid}')
+    future1 = session.get(f'{os.environ.get("MS2_URL")}api/userprofile3/{userid}')
     future2 = session.get(f'{os.environ.get("MS1_URL")}api/user/{userid}/partner')
     future3 = session.post(f'{os.environ.get("MS3_URL")}api/forum/user_id/{userid}', json = {
                 "label": 5,
@@ -38,7 +38,7 @@ def get_complete_user_profile(userid):
     # if the user has a partner, get partner's infomation
     if response2['success']:
         partner_id = list(response2['data'][0].values())[0]
-        future21 = session.get(f'http://localhost:5011/api/userprofile/{partner_id}')
+        future21 = session.get(f'http://localhost:5011/api/userprofile3/{partner_id}')
         response21 = future21.result().json()
         rsp_data['partner_info'] = response21['data'][0]
 
